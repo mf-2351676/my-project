@@ -1,0 +1,55 @@
+eureka:
+  client:
+    serviceUrl: #注册中心的注册地址
+      defaultZone: http://localhost:8761/eureka/
+server:
+  port: 9084
+spring:
+  application:
+    name: "zuul"
+  datasource:
+    url: jdbc:mysql://192.168.138.101:3306/cas?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 1234
+  redis:
+    database: 0
+    host: 192.168.138.101
+    port: 6379
+    timeout: 0
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+mybatis:
+  configuration:
+    call-setters-on-nulls: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:/com/myProject/dao/mapper/*.xml
+zuul:
+  routes:
+    api-a:
+      path: /zuul/**
+      serviceId: zuul
+      sensitive-headers:
+      custom-sensitive-headers: true
+#    api-b:
+#      path: /api-b/**
+#      serviceId: cloud-service1
+#    resource-admin:
+#      path: /admin/**
+#      serviceId: cloud-ida-admin
+security:
+  oauth2:
+    client:
+      clientId: 100015
+      clientSecret: 100015
+      accessTokenUri: http://192.168.138.101:8080/cas/oauth2.0/accessToken
+      userAuthorizationUri: http://192.168.138.101:8080/cas/oauth2.0/authorize?bypass_approval_prompt=true
+      tokenName: access_token
+      authenticationScheme: query
+      clientAuthenticationScheme: form
+    resource:
+      userInfoUri: http://192.168.138.101:8080/cas/oauth2.0/profile
