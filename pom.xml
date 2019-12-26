@@ -9,6 +9,7 @@
         <module>my-eureka</module>
         <module>my-zuul</module>
         <module>my-utils</module>
+        <module>my-manage</module>
     </modules>
     <name>my-project</name>
     <packaging>pom</packaging>

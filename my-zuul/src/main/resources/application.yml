@@ -36,8 +36,8 @@ zuul:
       sensitive-headers:
       custom-sensitive-headers: true
     api-b:
-      path: /admin/**
-      serviceId: "admin"
+      path: /manage/**
+      serviceId: "manage"
 #    resource-admin:
 #      path: /admin/**
 #      serviceId: cloud-ida-admin

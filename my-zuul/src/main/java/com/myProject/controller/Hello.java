@@ -40,7 +40,6 @@ public class Hello {
         String s = json.getString("tokenValue");
         String url = "http://192.168.138.101:8080/cas/oauth2.0/profile?access_token=" + s;
         try {
-            System.out.println(123);
             HttpResult doGet = HttpClientUtils.doGet(url);
             log.info("doGet : {}", doGet);
         } catch (Exception e) {
