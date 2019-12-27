@@ -17,8 +17,8 @@ import java.security.Principal;
 public class Test {
 
     @GetMapping("/test")
-    public Object test(Principal principal){
+    public String test(Principal principal){
         log.info("测试");
-        return principal;
+        return "<a href='http://127.0.0.1:9084/logout'/>退出";
     }
 }

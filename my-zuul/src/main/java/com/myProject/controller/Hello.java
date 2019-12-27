@@ -33,19 +33,8 @@ public class Hello {
     @GetMapping("/index")
     @ResponseBody
     public String sayHello() {
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        Object details = authentication.getDetails();
-        JSONObject json = (JSONObject) JSONObject.toJSON(details);
-        String s = json.getString("tokenValue");
-        String url = "http://192.168.138.101:8080/cas/oauth2.0/profile?access_token=" + s;
-        try {
-            HttpResult doGet = HttpClientUtils.doGet(url);
-            log.info("doGet : {}", doGet);
-        } catch (Exception e) {
-
-        }
-        SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object o = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.info("用户信息 : {}",o);
         return "<a href='/logout'/>退出";
     }
 
