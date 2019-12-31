@@ -1,7 +1,7 @@
 eureka:
   client:
     serviceUrl: #注册中心的注册地址
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://127.0.0.1:8761/eureka/
 server:
   port: 9084
 spring:
@@ -12,17 +12,6 @@ spring:
     driverClassName: com.mysql.cj.jdbc.Driver
     username: root
     password: 1234
-  redis:
-    database: 0
-    host: 192.168.138.101
-    port: 6379
-    timeout: 0
-    jedis:
-      pool:
-        max-active: 8
-        max-wait: -1
-        max-idle: 8
-        min-idle: 0
 mybatis:
   configuration:
     call-setters-on-nulls: true
@@ -47,7 +36,7 @@ security:
       clientId: 100015
       clientSecret: 100015
       accessTokenUri: http://192.168.138.101:8080/cas/oauth2.0/accessToken
-      userAuthorizationUri: http://192.168.138.101:8080/cas/oauth2.0/authorize?bypass_approval_prompt=true
+      userAuthorizationUri: http://192.168.138.101:8080/cas/oauth2.0/authorize
       tokenName: access_token
       authenticationScheme: query
       clientAuthenticationScheme: form

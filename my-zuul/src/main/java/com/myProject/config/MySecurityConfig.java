@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
  * @Author: menfeng
@@ -28,18 +27,13 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
                 .logout()
                 .logoutSuccessUrl("/exit")
-                .invalidateHttpSession(Boolean.TRUE)
                 .clearAuthentication(Boolean.TRUE)
+                .invalidateHttpSession(Boolean.TRUE)
                 .permitAll()
         .and()
                 .csrf()
-                .disable()
-                .userDetailsService(userDetailsServiceBean());
+                .disable();
+    }
 
 }
-    @Bean
-    @Override
-    public UserDetailsService userDetailsServiceBean() throws Exception {
-        return null;
-    }
-}
+

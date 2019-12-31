@@ -3,23 +3,21 @@ package com.myProject.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bean.HttpResult;
+import com.netflix.zuul.context.RequestContext;
 import com.utils.HttpClientUtils;
+import com.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.apache.tomcat.util.http.MimeHeaders;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Field;
 import java.security.Principal;
-import java.util.Collection;
 
 /**
  * @Author: menfeng
@@ -31,11 +29,19 @@ import java.util.Collection;
 public class Hello {
 
     @GetMapping("/index")
-    @ResponseBody
-    public String sayHello() {
-        Object o = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info("用户信息 : {}",o);
-        return "<a href='/logout'/>退出";
+    public String sayHello(Principal principal) {
+        try {
+            JSONObject pri = (JSONObject) JSONObject.toJSON(principal);
+            JSONObject details = (JSONObject) JSONObject.toJSON(pri.get("details"));
+            String token = details.getString("tokenValue");
+            String userId = principal.getName();
+            HttpResult doGet = HttpClientUtils.doGet("http://192.168.138.101:8080/cas/oauth2.0/profile?access_token=" + token);
+            RedisUtils.getRedisUtil().set(token, doGet.getBody());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:http://127.0.0.1:9084/manage/test";
+        //return "<a href = 'http://127.0.0.1:9084/logout'/>退出";
     }
 
     @GetMapping("/exit")
