@@ -1,22 +1,18 @@
 package com.myProject.controller;
 
-import com.alibaba.fastjson.JSON;
+
 import com.alibaba.fastjson.JSONObject;
 import com.bean.HttpResult;
-import com.netflix.zuul.context.RequestContext;
 import com.utils.HttpClientUtils;
 import com.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.MimeHeaders;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Field;
 import java.security.Principal;
 
 /**
@@ -31,6 +27,7 @@ public class Hello {
     @GetMapping("/index")
     public String sayHello(Principal principal) {
         try {
+            log.info("principal ------------ {}",principal);
             JSONObject pri = (JSONObject) JSONObject.toJSON(principal);
             JSONObject details = (JSONObject) JSONObject.toJSON(pri.get("details"));
             String token = details.getString("tokenValue");
@@ -41,7 +38,6 @@ public class Hello {
             e.printStackTrace();
         }
         return "redirect:http://127.0.0.1:9084/manage/test";
-        //return "<a href = 'http://127.0.0.1:9084/logout'/>退出";
     }
 
     @GetMapping("/exit")

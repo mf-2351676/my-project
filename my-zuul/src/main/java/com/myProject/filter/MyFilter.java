@@ -21,7 +21,10 @@ public class MyFilter extends ZuulFilter {
 
     @Override
     public Object run() {
+        System.out.println(1111);
         // TODO Auto-generated method stub
+        Object details1 = SecurityContextHolder.getContext().getAuthentication().getDetails();
+        log.info("details1 ------------ {}", details1);
         JSONObject details = (JSONObject) JSONObject.toJSON(SecurityContextHolder.getContext().getAuthentication().getDetails());
         log.info("token -------- {}" ,details.getString("tokenValue"));
         RequestContext requestContext = RequestContext.getCurrentContext();
