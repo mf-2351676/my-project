@@ -1,6 +1,7 @@
 package com.myManage.controller;
 
 import com.netflix.zuul.context.RequestContext;
+import com.utils.PasswdUtil;
 import com.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +22,11 @@ public class Test {
 
     @GetMapping("/test")
     public String test(HttpServletRequest request){
-        log.info("header = {}",request.getHeader("token"));
-        return "<a href='http://192.168.138.101:9084/logout'/>退出";
+        String token = request.getHeader("token");
+        log.info("test--token--:{}",token);
+        String s = RedisUtils.getRedisUtil().get(token);
+        log.info(s);
+        String pwd = PasswdUtil.getPwd("1", "admin");
+        return "admin的密码是："+pwd+"<a href='http://127.0.0.1:9084/logout'/>退出";
     }
 }

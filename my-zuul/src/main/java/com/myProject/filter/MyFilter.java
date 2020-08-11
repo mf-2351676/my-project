@@ -3,12 +3,15 @@ package com.myProject.filter;
 import com.alibaba.fastjson.JSONObject;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
+import com.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author: menfeng
@@ -21,14 +24,14 @@ public class MyFilter extends ZuulFilter {
 
     @Override
     public Object run() {
-        System.out.println(1111);
         // TODO Auto-generated method stub
+        log.info("1111");
         Object details1 = SecurityContextHolder.getContext().getAuthentication().getDetails();
         log.info("details1 ------------ {}", details1);
         JSONObject details = (JSONObject) JSONObject.toJSON(SecurityContextHolder.getContext().getAuthentication().getDetails());
-        log.info("token -------- {}" ,details.getString("tokenValue"));
+        log.info("token -------- {}", details.getString("tokenValue"));
         RequestContext requestContext = RequestContext.getCurrentContext();
-        HttpServletRequest req = (HttpServletRequest)RequestContext.getCurrentContext().getRequest();
+        HttpServletRequest req = (HttpServletRequest) RequestContext.getCurrentContext().getRequest();
         requestContext.addZuulRequestHeader("token", details.getString("tokenValue"));
         return null;
     }
@@ -38,11 +41,13 @@ public class MyFilter extends ZuulFilter {
         // TODO Auto-generated method stub
         return true; //表示是否需要执行该filter，true表示执行，false表示不执行
     }
+
     @Override
     public int filterOrder() {
         // TODO Auto-generated method stub
         return 0;
     }
+
     @Override
     public String filterType() {
         // TODO Auto-generated method stub
