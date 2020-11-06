@@ -1,0 +1,32 @@
+eureka:
+  client:
+    serviceUrl: #注册中心的注册地址
+      defaultZone: http://127.0.0.1:8761/eureka/
+server:
+  port: 9084
+spring:
+  application:
+    name: "zuul"
+  datasource:
+    url: jdbc:mysql://10.60.0.54/labsys1?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+mybatis:
+  configuration:
+    call-setters-on-nulls: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:/com/myProject/dao/mapper/*.xml
+zuul:
+  routes:
+    api-a:
+      path: /zuul/**
+      serviceId: zuul
+      sensitive-headers:
+      custom-sensitive-headers: true
+    api-b:
+      path: /manage/**
+      serviceId: "manage"
+#    resource-admin:
+#      path: /admin/**
+#      serviceId: cloud-ida-admin

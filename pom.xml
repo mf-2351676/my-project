@@ -10,6 +10,7 @@
         <module>my-zuul</module>
         <module>my-utils</module>
         <module>my-manage</module>
+        <module>zuul-filter</module>
     </modules>
     <name>my-project</name>
     <packaging>pom</packaging>
