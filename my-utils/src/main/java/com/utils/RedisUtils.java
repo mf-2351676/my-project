@@ -1,5 +1,6 @@
 package com.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.BinaryClient;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -14,6 +15,7 @@ import java.util.Set;
  * @Date: 2019/12/30 18:10
  * @Version 1.0
  */
+@Slf4j
 public class RedisUtils {
     private JedisPool pool = null;
 
@@ -26,6 +28,7 @@ public class RedisUtils {
     }
 
     private RedisUtils() {
+        log.info("12344");
         if (pool == null) {
             String ip = SysConfigUtil.getSysConfigUtil("redis.properties").getString("redis.host");
             int port = SysConfigUtil.getSysConfigUtil("redis.properties").getInt("redis.port");

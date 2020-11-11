@@ -14,8 +14,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableFeignClients
 @EnableZuulProxy
 @MapperScan({"com.myProject.dao.mapper.**"})
-public class ZuulApplication {
+public class ZuuFilterlApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ZuulApplication.class);
+        SpringApplication.run(ZuuFilterlApplication.class);
     }
 }
