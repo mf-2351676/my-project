@@ -1,5 +1,6 @@
 package com.utils;
 
+
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.BinaryClient;
 import redis.clients.jedis.Jedis;
@@ -16,28 +17,27 @@ import java.util.Set;
  * @Version 1.0
  */
 @Slf4j
-public class RedisUtils {
+public class RedisUtils2 {
     private JedisPool pool = null;
 
     private Jedis getJedis() {
         return pool.getResource();
     }
 
-    public static RedisUtils getRedisUtil() {
-        return new RedisUtils();
+    public static RedisUtils2 getRedisUtil() {
+        return new RedisUtils2();
     }
 
-    private RedisUtils() {
-        log.info("12344");
+    private RedisUtils2() {
         if (pool == null) {
-            String ip = SysConfigUtil.getSysConfigUtil("redis.properties").getString("redis.host");
-            int port = SysConfigUtil.getSysConfigUtil("redis.properties").getInt("redis.port");
-            String password = SysConfigUtil.getSysConfigUtil("redis.properties").getString("redis.password");
+            String ip = ReadProperties.ReadProperties("redis.properties").getString("redis.host");
+            int port = ReadProperties.ReadProperties("redis.properties").getInt("redis.port");
+            String password = ReadProperties.ReadProperties("redis.properties").getString("redis.password");
             JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-            jedisPoolConfig.setMaxTotal(SysConfigUtil.getSysConfigUtil("redis.properties").getInt("redis.maxTotal"));
-            jedisPoolConfig.setMaxIdle(SysConfigUtil.getSysConfigUtil("redis.properties").getInt("redis.maxIdle"));
-            jedisPoolConfig.setMaxWaitMillis(SysConfigUtil.getSysConfigUtil("redis.properties").getLong("redis.maxWaitMillis"));
-            jedisPoolConfig.setTestOnBorrow(SysConfigUtil.getSysConfigUtil("redis.properties").getBoolean("redis.testOnBorrow"));
+            jedisPoolConfig.setMaxTotal(ReadProperties.ReadProperties("redis.properties").getInt("redis.maxTotal"));
+            jedisPoolConfig.setMaxIdle(ReadProperties.ReadProperties("redis.properties").getInt("redis.maxIdle"));
+            jedisPoolConfig.setMaxWaitMillis(ReadProperties.ReadProperties("redis.properties").getLong("redis.maxWaitMillis"));
+            jedisPoolConfig.setTestOnBorrow(ReadProperties.ReadProperties("redis.properties").getBoolean("redis.testOnBorrow"));
             if (password != null && !"".equals(password)) {
                 // redis 设置了密码
                 pool = new JedisPool(jedisPoolConfig, ip, port, 10000, password);

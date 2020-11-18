@@ -12,17 +12,17 @@ import java.util.Properties;
  * @Version 1.0
  */
 
-public class SysConfigUtil {
+public class ReadProperties {
 
     private static Properties property = new Properties();
 
 
-    public static SysConfigUtil getSysConfigUtil(String path){
+    public static ReadProperties ReadProperties(String path){
         try{
             //InputStream in = SysConfigUtil.class.getResourceAsStream("classpath:/"+path);
-            InputStream in = SysConfigUtil.class.getResourceAsStream("/"+path);
+            InputStream in = ReadProperties.class.getResourceAsStream("/"+path);
             property.load(in);
-            return new SysConfigUtil();
+            return new ReadProperties();
         }catch (Exception e){
             e.printStackTrace();
         }
