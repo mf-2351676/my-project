@@ -4,12 +4,11 @@ package com.myProject.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.bean.HttpResult;
 import com.utils.HttpClientUtils;
-import com.utils.RedisUtils;
+import com.utils.RedisUtils2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +32,7 @@ public class Hello {
             String token = details.getString("tokenValue");
             String userId = principal.getName();
             HttpResult doGet = HttpClientUtils.doGet("http://192.168.138.101:8080/cas/oauth2.0/profile?access_token=" + token);
-            RedisUtils.getRedisUtil().set(token, doGet.getBody());
+            RedisUtils2.getRedisUtil().set(token, doGet.getBody());
         } catch (Exception e) {
             e.printStackTrace();
         }
