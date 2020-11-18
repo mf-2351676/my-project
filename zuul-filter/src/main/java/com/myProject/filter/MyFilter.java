@@ -1,20 +1,16 @@
 package com.myProject.filter;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.bean.HttpResult;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.utils.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,13 +29,11 @@ public class MyFilter extends ZuulFilter {
     public Object run() {
         try {
             // TODO Auto-generated method stub
-            log.info("1111");
             Map<String, Object> data = new HashMap<>();
             //获取上下文
             RequestContext requestContext = getCurrentContext();
             //获取request对象
             HttpServletRequest request = requestContext.getRequest();
-            HttpServletResponse response = requestContext.getResponse();
             //token对象
             String token = request.getHeader("token");
             if (StringUtils.isBlank((token))) {
@@ -51,16 +45,22 @@ public class MyFilter extends ZuulFilter {
                 //停止访问，并返回出错的消息
                 requestContext.setSendZuulResponse(false);
                 //防止中文乱码
-                //requestContext.getResponse().setContentType("text/html;charset=UTF-8");
+                requestContext.getResponse().setContentType("text/html;charset=UTF-8");
                 //设置返回的状态码和正文
-                response.sendRedirect("http://10.170.130.68:8180/newlogin.jsp");
+                requestContext.setResponseStatusCode(HttpStatus.UNAUTHORIZED.value());
+                data.put("code",HttpStatus.UNAUTHORIZED.value());
+                data.put("message",HttpStatus.UNAUTHORIZED.getReasonPhrase());
+                requestContext.setResponseBody(JSON.toJSONString(data));
             } else {
                 String url = "http://10.170.130.240:30115/cas/oauth2.0/profile?access_token=" + token;
                 HttpResult doGet = HttpClientUtils.doGet(url);
                 log.info("doget--{}",doGet);
                 if(doGet.getCode() != 200){
                     requestContext.setSendZuulResponse(false);
-                    response.sendRedirect("http://10.170.130.68:8180/newlogin.jsp");
+                    requestContext.setResponseStatusCode(HttpStatus.UNAUTHORIZED.value());
+                    data.put("code",HttpStatus.UNAUTHORIZED.value());
+                    data.put("message",HttpStatus.UNAUTHORIZED.getReasonPhrase());
+                    requestContext.setResponseBody(JSON.toJSONString(data));
                 }
             }
         } catch (Exception e) {

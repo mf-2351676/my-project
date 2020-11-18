@@ -7,16 +7,20 @@ server:
 spring:
   application:
     name: "zuul"
-  datasource:
-    url: jdbc:mysql://10.60.0.54/labsys1?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
-    driverClassName: com.mysql.cj.jdbc.Driver
-    username: root
-    password: root
-mybatis:
-  configuration:
-    call-setters-on-nulls: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  mapper-locations: classpath*:/com/myProject/dao/mapper/*.xml
+  servlet:
+    multipart:
+      max-request-size: 1024MB
+      max-file-size: 1024MB
+#  datasource:
+#    url: jdbc:mysql://10.60.0.54/labsys1?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
+#    driverClassName: com.mysql.cj.jdbc.Driver
+#    username: root
+#    password: root
+#mybatis:
+#  configuration:
+#    call-setters-on-nulls: true
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  mapper-locations: classpath*:/com/myProject/dao/mapper/*.xml
 zuul:
   routes:
     api-a:
@@ -30,3 +34,21 @@ zuul:
 #    resource-admin:
 #      path: /admin/**
 #      serviceId: cloud-ida-admin
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enable: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000 #单位ms
+ribbon:
+  ReadTimeout: 20000 #单位ms
+  ConnectTimeout: 60000 #单位ms
+  #同一个Server重试的次数(除去首次)
+  MaxAutoRetries: 3
+  #切换到不同Server的次数
+  MaxAutoRetriesNextServer: 3
+  #对所有方法进行重试
+  okToRetryOnAllOperations: true
