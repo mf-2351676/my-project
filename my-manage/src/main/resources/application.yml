@@ -14,10 +14,23 @@ spring:
     password: root
   servlet:
     multipart:
-      max-request-size: 1024MB
-      max-file-size: 1024MB
+      max-request-size: 5MB
+      max-file-size: 5MB
 mybatis:
   configuration:
     call-setters-on-nulls: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath*:/com/myProject/dao/mapper/*.xml
+fdfs:
+  so-timeout: 1500
+  connect-timeout: 1600
+  thumb-image:
+    width: 150
+    height: 150
+  tracker-list: 10.170.130.67:22122
+  pool:
+    max-total: 150
+    max-wait-millis: 120
+    jmx-name-base: 1
+    jmx-name-prefix: 1
+
