@@ -60,7 +60,7 @@
         <!-- oauth -->
         <oauth-version>1.0.2</oauth-version>
         <!-- fastdfs-->
-        <fdfs-version>1.27-SNAPSHOT</fdfs-version>
+        <fdfs-version>1.26.2</fdfs-version>
         <!--一个好用的工具类-->
         <hutool-version>4.0.12</hutool-version>
     </properties>
@@ -306,16 +306,11 @@
             </dependency>
             <!--fastdfs-->
             <dependency>
-                <groupId>org.csource</groupId>
-                <artifactId>fastdfs-client-java</artifactId>
+                <groupId>com.github.tobato</groupId>
+                <artifactId>fastdfs-client</artifactId>
                 <version>${fdfs-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-log4j12</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
+
             <!--一个好用的工具类-->
             <dependency>
                 <groupId>cn.hutool</groupId>
