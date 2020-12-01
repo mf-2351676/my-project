@@ -2,7 +2,7 @@ package com.myManage.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @Author: menfeng
@@ -10,14 +10,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @Version 1.0
  */
 @Configuration
-public class CorsConfig extends WebMvcConfigurerAdapter {
+public class CorsConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("*")
+                .allowedMethods("GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowCredentials(true)
-                .allowedMethods("GET", "POST", "DELETE", "PUT")
-                .maxAge(3600);
+                .maxAge(3600)
+                .allowedHeaders("*");
     }
 }

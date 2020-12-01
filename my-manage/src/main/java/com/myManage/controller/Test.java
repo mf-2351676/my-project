@@ -1,6 +1,5 @@
 package com.myManage.controller;
 
-import com.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,14 +21,7 @@ public class Test {
         log.info(s);
         String pwd = PasswdUtil.getPwd("1", "admin");
         return "admin的密码是：" + pwd + "<a href='http://127.0.0.1:9084/logout'/>退出";*/
-       return "123456";
-    }
-
-    @GetMapping("/hello")
-    public String testRedis(){
-        log.info("why");
-        RedisUtil.setString("123","helloworld");
-        return RedisUtil.getString("123");
+       return "192.168.21.59";
     }
 
 
