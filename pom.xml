@@ -62,7 +62,7 @@
         <!-- fastdfs-->
         <fdfs-version>1.26.2</fdfs-version>
         <!--一个好用的工具类-->
-        <hutool-version>4.0.12</hutool-version>
+        <hutool-version>4.1.12</hutool-version>
     </properties>
 
     <dependencyManagement>
