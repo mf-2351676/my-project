@@ -13,6 +13,7 @@ import com.myManage.common.CheckFileResult;
 import com.myManage.common.FileResult;
 import com.myManage.common.UpLoadConstant;
 import com.utils.RedisUtil;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +33,7 @@ import java.util.Map;
  * @Date: 2020/11/23 17:01
  * @Version 1.0
  */
+@Api(tags = "文件上传")
 @Slf4j
 @RestController
 @RequestMapping("/file")
@@ -52,6 +54,19 @@ public class FileController {
      * @param userName
      * @return
      */
+    @ApiOperation(httpMethod = "POST", value = "检查文件锁是否占用(上传文件前调用)")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="fileMd5",value="前端生成的Md5",paramType="query",required = true),
+            @ApiImplicitParam(name="fileName",value="文件名称",paramType="query",required = true),
+            @ApiImplicitParam(name="fileSize",value="文件总大小",paramType="query",required = true),
+            @ApiImplicitParam(name="userName",value="用户名",paramType="query",required = true),
+            @ApiImplicitParam(name="token",value="令牌",paramType="query",required = true),
+
+    })
+    @ApiResponses({
+            @ApiResponse(code = 401, message = "token过期"),
+            @ApiResponse(code = 200, message = "文件上传成功"),
+    })
     @PostMapping("/checkFile")
     public Map<String, Object> chunkFile(@RequestParam("fileMd5") String fileMd5,//前端生成的Md5
                                          @RequestParam("fileName") String fileName,//文件名称
@@ -65,7 +80,7 @@ public class FileController {
             return data;
         }
         if (StrUtil.isEmpty(fileMd5)) {
-            data.put("code", 500);
+            data.put("code", 501);
             data.put("message", "fileMd5为空");
             return data;
         }
@@ -95,7 +110,7 @@ public class FileController {
             //检查是否为锁的拥有者,如果是放行
             String oWner = RedisUtil.getString(lockOwner);
             if (StrUtil.isEmpty(oWner)) {
-                data.put("code", 500);
+                data.put("code", 502);
                 data.put("message", "无法获取文件锁拥有者");
                 return data;
             } else {
@@ -103,7 +118,7 @@ public class FileController {
                 if (oWner.equals(userName)) {
                     String chunkCurr = RedisUtil.getString(chunkCurrkey);
                     if (StrUtil.isEmpty(chunkCurr)) {
-                        data.put("code", 500);
+                        data.put("code", 503);
                         data.put("message", "无法获取当前文件chunkCurr");
                         return data;
                     }
@@ -113,7 +128,7 @@ public class FileController {
                     data.put("data", checkFileResult);
                     return data;
                 } else {
-                    data.put("code", 500);
+                    data.put("code", 504);
                     data.put("message", "当前文件已有人在上传,您暂无法上传该文件");
                     return data;
                 }
@@ -143,6 +158,22 @@ public class FileController {
      * @param userName
      * @return
      */
+    @ApiOperation(httpMethod = "POST", value = "文件分片上传")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="identifier",value="文件md5",paramType="query",required = true),
+            @ApiImplicitParam(name="chunkNumber",value="当前第几块",paramType="query",dataType = "Int",required = true),
+            @ApiImplicitParam(name="totalChunks",value="总块数",paramType="query",dataType = "Int",required = true),
+            @ApiImplicitParam(name="chunkSize",value="当前块大小",paramType="query",required = true),
+            @ApiImplicitParam(name="filename",value="文件名称",paramType="query",required = true),
+            @ApiImplicitParam(name="totalSize",value="文件总大小",paramType="query",dataType = "Int",required = true),
+            //@ApiImplicitParam(name="file",value="文件",paramType="query",required = true),
+            @ApiImplicitParam(name="userName",value="用户名",paramType="query",required = true),
+            @ApiImplicitParam(name="token",value="令牌",paramType="query",required = true)
+    })
+    @ApiResponses({
+            @ApiResponse(code = 401, message = "token过期"),
+            @ApiResponse(code = 200, message = "文件上传成功"),
+    })
     @PostMapping("/upload_do")
     public Map<String, Object> upload_do(@RequestParam("identifier") String identifier, //文件md5
                                          @RequestParam("chunkNumber") Integer chunkNumber, //当前第几块
@@ -174,7 +205,7 @@ public class FileController {
             }
             Long lock = RedisUtil.incrBy(chunklockName, 1);
             if (lock > 1) {
-                data.put("code", 500);
+                data.put("code", 501);
                 data.put("message", "请求块锁失败");
                 return data;
             }
@@ -186,17 +217,17 @@ public class FileController {
             noGroupPath = "";
             //Integer chunkSize=Convert.toInt("chunkSize");
             if (StrUtil.isEmpty(chunkCurr)) {
-                data.put("code", 500);
+                data.put("code", 502);
                 data.put("message", "无法获取当前文件chunkCurr");
                 return data;
             }
             Integer chunkCurr_int = Convert.toInt(chunkCurr);
             if (chunkNumber < chunkCurr_int) {
-                data.put("code", 500);
+                data.put("code", 503);
                 data.put("message", "当前文件块已上传");
                 return data;
             } else if (chunkNumber > chunkCurr_int) {
-                data.put("code", 500);
+                data.put("code", 504);
                 data.put("message", "当前文件块需要等待上传,稍后请重试");
                 return data;
             }
@@ -217,7 +248,7 @@ public class FileController {
                             log.debug(chunkNumber + ":更新完fastdfs");
                             if (path == null) {
                                 RedisUtil.setString(chunkCurrkey, Convert.toStr(chunkCurr_int));
-                                data.put("code", 500);
+                                data.put("code", 505);
                                 data.put("message", "获取远程文件路径出错");
                                 return data;
                             }
@@ -226,7 +257,7 @@ public class FileController {
                             // e.printStackTrace();
                             //还原历史块
                             log.error("初次上传远程文件出错", e);
-                            data.put("code", 500);
+                            data.put("code", 506);
                             data.put("message", "上传远程服务器文件出错");
                             return data;
                         }
@@ -238,7 +269,7 @@ public class FileController {
                         log.debug(chunkNumber + ":redis块+1");
                         noGroupPath = RedisUtil.getString(UpLoadConstant.fastDfsPath + identifier);
                         if (noGroupPath == null) {
-                            data.put("code", 500);
+                            data.put("code", 507);
                             data.put("message", "无法获取上传远程服务器文件出错");
                             return data;
                         }
@@ -251,7 +282,7 @@ public class FileController {
                             log.error("更新远程文件出错", e);
                             //   e.printStackTrace();
                             //  throw  new RuntimeException("初次上传远程文件出错");
-                            data.put("code", 500);
+                            data.put("code", 508);
                             data.put("message", "更新远程文件出错");
                             return data;
                         }
@@ -273,7 +304,7 @@ public class FileController {
                 } catch (Exception e) {
                     log.error("上传文件错误", e);
                     //e.printStackTrace();
-                    data.put("code", 500);
+                    data.put("code", 509);
                     data.put("message", "上传错误 " + e.getMessage());
                     return data;
                 }

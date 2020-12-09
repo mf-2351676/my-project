@@ -34,33 +34,35 @@ public class MyFilter extends ZuulFilter {
             RequestContext requestContext = getCurrentContext();
             //获取request对象
             HttpServletRequest request = requestContext.getRequest();
-            //token对象
-            String token = request.getHeader("token");
-            if (StringUtils.isBlank((token))) {
-                token = request.getParameter("token");
-            }
-            //登录校验逻辑  根据公司情况自定义 JWT
-            //token为空，就不能访问
-            if (StringUtils.isBlank(token)) {
-                //停止访问，并返回出错的消息
-                requestContext.setSendZuulResponse(false);
-                //防止中文乱码
-                requestContext.getResponse().setContentType("text/html;charset=UTF-8");
-                //设置返回的状态码和正文
-                requestContext.setResponseStatusCode(HttpStatus.UNAUTHORIZED.value());
-                data.put("code",HttpStatus.UNAUTHORIZED.value());
-                data.put("message",HttpStatus.UNAUTHORIZED.getReasonPhrase());
-                requestContext.setResponseBody(JSON.toJSONString(data));
-            } else {
-                String url = "http://10.170.130.240:30115/cas/oauth2.0/profile?access_token=" + token;
-                HttpResult doGet = HttpClientUtils.doGet(url);
-                log.info("doget--{}",doGet);
-                if(doGet.getCode() != 200){
+            String servletPath = request.getServletPath();
+            if (!servletPath.contains("/v2/api-docs")){
+                //token对象
+                String token = request.getHeader("token");
+                if (StringUtils.isBlank((token))) {
+                    token = request.getParameter("token");
+                }
+                //token为空，就不能访问
+                if (StringUtils.isBlank(token)) {
+                    //停止访问，并返回出错的消息
                     requestContext.setSendZuulResponse(false);
+                    //防止中文乱码
+                    requestContext.getResponse().setContentType("text/html;charset=UTF-8");
+                    //设置返回的状态码和正文
                     requestContext.setResponseStatusCode(HttpStatus.UNAUTHORIZED.value());
                     data.put("code",HttpStatus.UNAUTHORIZED.value());
                     data.put("message",HttpStatus.UNAUTHORIZED.getReasonPhrase());
                     requestContext.setResponseBody(JSON.toJSONString(data));
+                } else {
+                    String url = "http://10.170.130.240:30115/cas/oauth2.0/profile?access_token=" + token;
+                    HttpResult doGet = HttpClientUtils.doGet(url);
+                    log.info("doget--{}",doGet);
+                    if(doGet.getCode() != 200){
+                        requestContext.setSendZuulResponse(false);
+                        requestContext.setResponseStatusCode(HttpStatus.UNAUTHORIZED.value());
+                        data.put("code",HttpStatus.UNAUTHORIZED.value());
+                        data.put("message",HttpStatus.UNAUTHORIZED.getReasonPhrase());
+                        requestContext.setResponseBody(JSON.toJSONString(data));
+                    }
                 }
             }
         } catch (Exception e) {
@@ -79,7 +81,7 @@ public class MyFilter extends ZuulFilter {
     @Override
     public int filterOrder() {
         // TODO Auto-generated method stub
-        return 0;
+        return 5;
     }
 
     @Override

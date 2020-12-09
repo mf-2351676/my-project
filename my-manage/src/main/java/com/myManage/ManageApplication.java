@@ -16,9 +16,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @Date: 2019/12/26 11:17
  * @Version 1.0
  */
+@EnableSwagger2
 @SpringBootApplication
 @EnableEurekaClient
-@EnableSwagger2
 @EnableFeignClients
 @MapperScan({"com.myProject.dao.mapper.**"})
 @Import(FdfsClientConfig.class)

@@ -64,7 +64,7 @@ public class RedisUtil {
                 //jp = new JedisPool(config, ReadProperties.ReadProperties("redis.properties").getString("redis.host"), ReadProperties.ReadProperties("redis.properties").getInt("redis.port"), ReadProperties.ReadProperties("redis.properties").getInt("redis.timeOut"), ReadProperties.ReadProperties("redis.properties").getString("redis.password"));
                 jp = new JedisPool(config, ADDR_ARRAY, PORT, TIMEOUT, AUTH);
             } else {
-                //jp = new JedisPool(config, ReadProperties.ReadProperties("redis.properties").getString("redis.host"), ReadProperties.ReadProperties("redis.properties").getInt("redis.port"), ReadProperties.ReadProperties("redis.properties").getInt("redis.timeOut"));
+                //jp = new JedisPool(config, ReadProperties.ReadProperties(redis.properties").getString("redis.host"), ReadProperties.ReadProperties("redis.properties").getInt("redis.port"), ReadProperties.ReadProperties("redis.properties").getInt("redis.timeOut"));
                 jp = new JedisPool(config, ADDR_ARRAY, PORT, TIMEOUT);
             }
             jedisPool = jp;

@@ -1,9 +1,9 @@
 eureka:
   client:
     serviceUrl: #注册中心的注册地址
-      defaultZone: http://192.168.138.251:8761/eureka/
+      defaultZone: http://127.0.0.1:8761/eureka/
 server:
-  port: 9088
+  port: 9090
 spring:
   application:
     name: "manage"
@@ -20,7 +20,7 @@ mybatis:
   configuration:
     call-setters-on-nulls: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  mapper-locations: classpath*:/com/myProject/dao/mapper/*.xml
+  mapper-locations: classpath*:/com/myManage/dao/mapper/*.xml
 fdfs:
   so-timeout: 1500
   connect-timeout: 1600
