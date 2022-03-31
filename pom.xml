@@ -31,7 +31,7 @@
         <zipin-version>2.7.5</zipin-version>
         <netflix-version>2.0.0.RELEASE</netflix-version>
         <servo-core-version>0.12.17</servo-core-version>
-        <spring-version>5.0.7.RELEASE</spring-version>
+        <spring-version>5.3.18</spring-version>
         <feign-form-version>3.3.0</feign-form-version>
         <feign-core-version>8.18.0</feign-core-version>
         <spring-feign-version>1.4.5.RELEASE</spring-feign-version>
