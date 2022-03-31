@@ -27,7 +27,7 @@
         <java.version>1.8</java.version>
         <skipTests>true</skipTests>
         <!--spring boot-->
-        <spring-boot-version>2.0.3.RELEASE</spring-boot-version>
+        <spring-boot-version>2.5.12</spring-boot-version>
         <zipin-version>2.7.5</zipin-version>
         <netflix-version>2.0.0.RELEASE</netflix-version>
         <servo-core-version>0.12.17</servo-core-version>
