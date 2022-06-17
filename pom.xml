@@ -50,7 +50,7 @@
         <!--分页-->
         <pageHelper-version>5.0.1</pageHelper-version>
         <!--json-->
-        <fastjson-version>1.2.47</fastjson-version>
+        <fastjson-version>1.2.83</fastjson-version>
         <!--单元测试-->
         <junit-version>4.8.2</junit-version>
         <!--shiro-->
