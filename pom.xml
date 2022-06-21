@@ -36,7 +36,7 @@
         <feign-core-version>8.18.0</feign-core-version>
         <spring-feign-version>1.4.5.RELEASE</spring-feign-version>
         <!--数据库连接-->
-        <mysql-version>8.0.11</mysql-version>
+        <mysql-version>8.0.28</mysql-version>
         <druid-version>1.0.29</druid-version>
         <redis-client-version>2.9.0</redis-client-version>
         <!--mybatis-->
